@@ -8,6 +8,7 @@ from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor, ConsoleSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+from fastapi.responses import HTMLResponse
 from app.checker import check_url
 
 # Configure OpenTelemetry tracer provider & console span processor
@@ -35,6 +36,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 FastAPIInstrumentor.instrument_app(app)
+
+@app.get("/", response_class=HTMLResponse)
+async def dashboard():
+    with open("app/templates/index.html", "r") as f:
+        return f.read()
 
 @app.get("/check")
 async def trigger_check():
