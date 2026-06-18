@@ -17,7 +17,7 @@ trace.set_tracer_provider(provider)
 
 # Parse URLs list from environment variable
 URLS = [
-    url.strip() if url.strip().startswith("http") else f"https://{url.strip()}"
+    url.strip() if url.strip().startswith(("http://", "https://")) else f"https://{url.strip()}"
     for url in os.getenv("MONITOR_URLS", "github.com,yelp.com,httpbin.org").split(",")
 ]
 
