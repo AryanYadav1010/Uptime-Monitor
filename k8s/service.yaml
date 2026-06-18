@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uptime-monitor
+  labels:
+    app: uptime-monitor
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: 8000
+    name: http
+    protocol: TCP
+  selector:
+    app: uptime-monitor
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: uptime-monitor-monitor
+  labels:
+    release: prometheus # standard selector for kube-prometheus-stack helm chart
+spec:
+  selector:
+    matchLabels:
+      app: uptime-monitor
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 15s

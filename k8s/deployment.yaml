@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uptime-monitor
+  labels:
+    app: uptime-monitor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: uptime-monitor
+  template:
+    metadata:
+      labels:
+        app: uptime-monitor
+    spec:
+      containers:
+      - name: uptime-monitor
+        image: <ECR_URL>:latest # To be updated dynamically by CI/CD
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: MONITOR_URLS
+          value: "github.com,yelp.com,httpbin.org"

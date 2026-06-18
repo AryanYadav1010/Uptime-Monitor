@@ -1,0 +1,21 @@
+# INTERVIEW AMMUNITION: Utilizing PrometheusRule Custom Resource Definitions (CRDs) allows alert definitions to be managed natively within Kubernetes as declarative GitOps artifacts, enabling developer self-service and keeping alarm logic closely coupled with the application services they monitor.
+
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: uptime-monitor-alerts
+  labels:
+    role: alert-rules
+    release: prometheus # standard selector for kube-prometheus-stack helm chart
+spec:
+  groups:
+  - name: uptime-monitor.rules
+    rules:
+    - alert: UrlDown
+      expr: check_up == 0
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "Target URL down: {{ $labels.url }}"
+        description: "The monitored URL {{ $labels.url }} has been down (returning non-2xx/3xx or timeout) for more than 2 minutes."

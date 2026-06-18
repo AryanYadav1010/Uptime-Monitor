@@ -1,0 +1,22 @@
+# INTERVIEW AMMUNITION: The HorizontalPodAutoscaler (HPA) dynamically scales the number of pod replicas up or down based on observed CPU utilization, guaranteeing high availability under unexpected load spikes while minimizing resource waste during quiet periods.
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: uptime-monitor-hpa
+  labels:
+    app: uptime-monitor
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: uptime-monitor
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
