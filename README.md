@@ -53,6 +53,7 @@ make destroy
 
 *   **`app/`**: Contains the FastAPI service.
     *   [`main.py`](file:///Users/aryanyadav/Desktop/yelp%20project/app/main.py): Sets up the FastAPI application, background loops, and configures OpenTelemetry instrumentation.
+    *   [`templates/index.html`](file:///Users/aryanyadav/Desktop/yelp%20project/app/templates/index.html): Clean, minimally elegant web dashboard showing health status cards, latency metrics, OpenTelemetry trace IDs, and a persistent dark/light mode toggle.
     *   [`checker.py`](file:///Users/aryanyadav/Desktop/yelp%20project/app/checker.py): Async checker executing non-blocking HTTP requests, injecting OTel spans/context propagation, and exporting JSON structured logs.
     *   [`metrics.py`](file:///Users/aryanyadav/Desktop/yelp%20project/app/metrics.py): Registers custom Prometheus metrics (`check_up`, `check_latency_seconds`).
     *   [`Dockerfile`](file:///Users/aryanyadav/Desktop/yelp%20project/app/Dockerfile): Secure multi-stage production build running as non-root user (UID 1000).
