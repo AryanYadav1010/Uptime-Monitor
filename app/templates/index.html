@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Dark mode default variables */
             --bg: #090b10;
             --card-bg: #11141d;
             --border: #1d2230;
@@ -15,6 +16,15 @@
             --green: #10b981;
             --red: #ef4444;
             --blue: #3b82f6;
+        }
+
+        [data-theme="light"] {
+            /* Light mode variables */
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+            --text-main: #111827;
+            --text-muted: #6b7280;
         }
 
         body {
@@ -28,6 +38,7 @@
             align-items: flex-start;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
@@ -55,6 +66,12 @@
             font-size: 0.9rem;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .status-pill {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.75rem;
@@ -67,6 +84,8 @@
 
         .controls {
             margin-bottom: 24px;
+            display: flex;
+            gap: 10px;
         }
 
         button {
@@ -106,6 +125,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .card-top {
@@ -170,7 +190,10 @@
                 <h1>Uptime Monitor</h1>
                 <p class="subtitle">Observability & URL latency tracking</p>
             </div>
-            <div class="status-pill" id="system-status">status: checking</div>
+            <div class="header-right">
+                <button id="theme-btn" onclick="toggleTheme()" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 4px;">☼ Light</button>
+                <div class="status-pill" id="system-status">status: checking</div>
+            </div>
         </header>
 
         <div class="controls">
@@ -183,6 +206,25 @@
     </div>
 
     <script>
+        // Theme Toggle Logic
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('theme', target);
+            updateThemeButton(target);
+        }
+
+        function updateThemeButton(theme) {
+            document.getElementById('theme-btn').innerText = theme === 'light' ? '☾ Dark' : '☼ Light';
+        }
+
+        // Initialize Theme from localStorage
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeButton(savedTheme);
+
+        // Fetching Data Logic
         async function fetchStatus() {
             try {
                 const res = await fetch('/check');
