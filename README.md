@@ -31,7 +31,8 @@ Follow these five commands to provision, build, and deploy the entire solution:
 
 ```bash
 # 1. Clone & Enter repository
-cd "yelp project"
+git clone https://github.com/AryanYadav1010/Uptime-Monitor.git
+cd Uptime-Monitor
 
 # 2. Provision AWS VPC, EKS Cluster, and ECR Registry via Terraform
 make deploy
